@@ -100,7 +100,7 @@ h3,.h3{font-size:clamp(21px,2vw,26px)}
 
 /* ---------- buttons ---------- */
 .btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  display:inline-flex;flex:none;align-items:center;justify-content:center;gap:10px;
   padding:17px 30px;
   border:2px solid transparent;border-radius:8px;
   font-family:"Inter",sans-serif;
@@ -148,18 +148,20 @@ h3,.h3{font-size:clamp(21px,2vw,26px)}
   transition:box-shadow .25s ease;
 }
 .site-header.is-stuck{box-shadow:0 8px 30px rgba(20,17,15,.1)}
-.header-inner{display:flex;align-items:center;gap:28px;min-height:var(--header-h)}
+.header-inner{display:flex;align-items:center;gap:24px;min-height:var(--header-h);flex-wrap:nowrap}
 .brand{flex:none}
 .brand img{width:224px;height:auto}
 
-.main-nav{margin-left:auto}
-.main-nav > ul{display:flex;align-items:center;gap:4px;margin:0;padding:0;list-style:none}
+.main-nav{margin-left:auto;min-width:0}
+.main-nav > ul{display:flex;align-items:center;flex-wrap:nowrap;gap:2px;margin:0;padding:0;list-style:none}
 .main-nav > ul > li{position:relative}
+.main-nav > ul > li{flex:none}
 .main-nav > ul > li > a{
   display:flex;align-items:center;gap:6px;
-  padding:12px 13px;
-  font-size:14px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
+  padding:12px 12px;
+  font-size:14px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;
   color:var(--ink);border-radius:6px;
+  white-space:nowrap;
   transition:color .2s ease,background-color .2s ease;
 }
 .main-nav > ul > li > a:hover,.main-nav > ul > li.is-current > a{color:var(--secondary)}
@@ -209,14 +211,20 @@ h3,.h3{font-size:clamp(21px,2vw,26px)}
 .burger.is-open span:nth-child(2){opacity:0}
 .burger.is-open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
-@media (max-width:1200px){
-  .main-nav > ul > li > a{padding:12px 9px;font-size:13px}
-  .brand img{width:196px}
+@media (max-width:1400px){
+  .main-nav > ul > li > a{padding:12px 9px;font-size:13.5px}
+  .header-cta{padding:15px 22px;font-size:13px}
+  .brand img{width:200px}
 }
-@media (max-width:1100px){
+@media (max-width:1220px){
+  .main-nav > ul > li > a{padding:11px 7px;font-size:12.5px;letter-spacing:0}
+  .brand img{width:180px}
+  .header-inner{gap:16px}
+}
+@media (max-width:1120px){
   .header-cta{display:none}
 }
-@media (max-width:992px){
+@media (max-width:1040px){
   :root{--header-h:78px}
   .main-nav{display:none}
   .phone-circle,.burger{display:inline-flex}
@@ -249,13 +257,17 @@ h3,.h3{font-size:clamp(21px,2vw,26px)}
    ========================================================= */
 .hero{
   position:relative;
-  background:var(--ink-2) url("https://scdoors.com.au/wp-content/uploads/2025/04/Hero-banner-image.jpg") center/cover no-repeat;
+  background:var(--ink-2) url("https://scdoors.com.au/wp-content/uploads/2025/04/Hero-banner-image.jpg") center center/cover no-repeat;
   color:var(--primary);
   isolation:isolate;
 }
-.hero::after{
-  content:"";position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(100deg,rgba(16,14,12,.94) 0%,rgba(16,14,12,.86) 42%,rgba(16,14,12,.58) 72%,rgba(16,14,12,.42) 100%);
+/* no overlay on the banner, the photo shows at full strength.
+   Text stays readable through shadows only. */
+.hero__content{
+  text-shadow:0 2px 14px rgba(0,0,0,.85),0 1px 3px rgba(0,0,0,.8);
+}
+.hero__text,.hero__list li,.hero__meta div,.hero__rating span{
+  text-shadow:0 1px 2px rgba(0,0,0,.95),0 2px 10px rgba(0,0,0,.85),0 0 22px rgba(0,0,0,.6);
 }
 .hero .container{
   display:grid;
@@ -265,13 +277,14 @@ h3,.h3{font-size:clamp(21px,2vw,26px)}
 }
 .hero h1{color:var(--primary);max-width:16ch}
 .hero h1 em{font-style:normal;color:var(--theredary)}
-.hero__text{font-size:18px;color:rgba(255,255,255,.82);max-width:60ch}
+.hero__text{font-size:18px;color:#fff;max-width:60ch}
+.hero__content svg{filter:drop-shadow(0 2px 6px rgba(0,0,0,.55))}
 .hero__rating{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
 .stars{display:inline-flex;gap:3px}
 .stars svg{width:18px;height:18px;color:var(--theredary)}
-.hero__rating span{font-size:14px;font-weight:600;color:rgba(255,255,255,.8)}
+.hero__rating span{font-size:14px;font-weight:700;color:#fff}
 .hero__list{list-style:none;margin:26px 0 34px;padding:0;display:grid;gap:13px}
-.hero__list li{display:flex;align-items:flex-start;gap:12px;font-size:16px;color:rgba(255,255,255,.9);font-weight:500}
+.hero__list li{display:flex;align-items:flex-start;gap:12px;font-size:16px;color:#fff;font-weight:600}
 .tick{
   flex:none;width:24px;height:24px;border-radius:50%;
   background:var(--secondary);color:#fff;
@@ -279,12 +292,13 @@ h3,.h3{font-size:clamp(21px,2vw,26px)}
 }
 .tick svg{width:13px;height:13px}
 .hero__btns{display:flex;flex-wrap:wrap;gap:14px}
-.hero__meta{display:flex;flex-wrap:wrap;gap:26px;margin-top:34px;padding-top:26px;border-top:1px solid rgba(255,255,255,.16)}
-.hero__meta div{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:rgba(255,255,255,.82)}
+.hero__meta{display:flex;flex-wrap:wrap;gap:26px;margin-top:34px;padding-top:26px;border-top:1px solid rgba(255,255,255,.3)}
+.hero__meta div{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;color:#fff}
 .hero__meta svg{width:18px;height:18px;color:var(--secondary)}
 
 /* hero form card */
 .quote-card{
+  text-shadow:none;
   background:var(--primary);
   border-radius:18px;
   box-shadow:var(--shadow-lg);
@@ -570,9 +584,33 @@ h3,.h3{font-size:clamp(21px,2vw,26px)}
 @media (max-width:680px){.reviews{grid-auto-columns:minmax(0,88%)}.review{padding:26px}}
 
 /* brand logos */
-.brands{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:44px 64px;margin-top:56px;padding-top:46px;border-top:1px solid var(--line)}
-.brands img{max-height:46px;width:auto;opacity:.55;filter:grayscale(1);transition:opacity .25s ease,filter .25s ease}
-.brands img:hover{opacity:1;filter:none}
+.brands{
+  display:flex;align-items:center;flex-wrap:nowrap;gap:40px;
+  margin-top:64px;padding-top:48px;border-top:1px solid var(--line);
+}
+.brands__label{flex:none;padding-right:8px}
+.brands__label strong{
+  display:block;font-family:"Barlow Condensed","Inter",sans-serif;
+  font-size:24px;font-weight:700;line-height:1.1;text-transform:uppercase;
+  letter-spacing:.02em;color:var(--ink);
+}
+.brands__label span{display:block;font-size:15px;color:var(--body);margin-top:2px}
+.brands__logos{
+  flex:1;min-width:0;
+  display:flex;align-items:center;justify-content:space-between;gap:44px;
+  overflow-x:auto;scrollbar-width:none;
+}
+.brands__logos::-webkit-scrollbar{display:none}
+.brands__logos img{
+  flex:none;max-height:56px;width:auto;
+  transition:transform .25s ease;
+}
+.brands__logos img:hover{transform:scale(1.05)}
+@media (max-width:992px){
+  .brands{flex-direction:column;align-items:flex-start;gap:26px;text-align:left}
+  .brands__logos{width:100%;justify-content:flex-start;gap:36px;padding-bottom:6px}
+  .brands__logos img{max-height:44px}
+}
 
 /* =========================================================
    FAQ
@@ -1272,12 +1310,18 @@ h3,.h3{font-size:clamp(21px,2vw,26px)}
     </div>
 
     <div class="brands">
-      <img src="https://scdoors.com.au/wp-content/uploads/2025/04/Logo-1.png" alt="Brand partner" loading="lazy">
-      <img src="https://scdoors.com.au/wp-content/uploads/2025/04/Logo-2.png" alt="Brand partner" loading="lazy">
-      <img src="https://scdoors.com.au/wp-content/uploads/2025/04/Logo-3.png" alt="Brand partner" loading="lazy">
-      <img src="https://scdoors.com.au/wp-content/uploads/2025/04/Logo-4.png" alt="Brand partner" loading="lazy">
-      <img src="https://scdoors.com.au/wp-content/uploads/2025/04/Logo-5.png" alt="Brand partner" loading="lazy">
-      <img src="https://scdoors.com.au/wp-content/uploads/2025/04/Logo-6.png" alt="Brand partner" loading="lazy">
+      <div class="brands__label">
+        <strong>Accreditations</strong>
+        <span>Licenses &amp; Compliance</span>
+      </div>
+      <div class="brands__logos">
+        <img src="https://scdoors.com.au/wp-content/uploads/2025/04/Logo-1.png" alt="Merlin" loading="lazy">
+        <img src="https://scdoors.com.au/wp-content/uploads/2025/04/Logo-2.png" alt="Gliderol Garage Doors" loading="lazy">
+        <img src="https://scdoors.com.au/wp-content/uploads/2025/04/Logo-3.png" alt="Steel-Line Garage Doors" loading="lazy">
+        <img src="https://scdoors.com.au/wp-content/uploads/2025/04/Logo-4.png" alt="Automatic Technology" loading="lazy">
+        <img src="https://scdoors.com.au/wp-content/uploads/2025/04/Logo-5.png" alt="Centurion Garage Doors" loading="lazy">
+        <img src="https://scdoors.com.au/wp-content/uploads/2025/04/Logo-6.png" alt="Brand partner" loading="lazy">
+      </div>
     </div>
   </div>
 </section>
