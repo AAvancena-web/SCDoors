@@ -586,15 +586,6 @@ h3,.h3{font-size:clamp(21px,2vw,26px)}
 }
 .review__person strong{display:block;font-size:15.5px;color:var(--ink);font-weight:700}
 .review__person span{font-size:13.5px;color:var(--body)}
-.reviews-nav{display:flex;gap:12px;justify-content:center;margin-top:42px}
-.reviews-nav button{
-  width:50px;height:50px;border-radius:50%;
-  background:var(--primary);border:1.5px solid var(--line);color:var(--ink);
-  display:inline-flex;align-items:center;justify-content:center;
-  transition:background-color .2s ease,color .2s ease,border-color .2s ease;
-}
-.reviews-nav button:hover{background:var(--secondary);border-color:var(--secondary);color:var(--primary)}
-.reviews-nav svg{width:18px;height:18px}
 @media (max-width:992px){.reviews{grid-auto-columns:minmax(0,calc(50% - 15px))}}
 @media (max-width:680px){.reviews{grid-auto-columns:minmax(0,88%)}.review{padding:26px}}
 
@@ -948,6 +939,40 @@ body{background:var(--primary)}
   text-shadow:none;
   filter:drop-shadow(0 3px 10px rgba(0,0,0,.55));
 }
+/* banner secondary CTA: solid white with black text.
+   The hero copy carries a text shadow for legibility over the photo,
+   which must not apply to text sitting on a solid button. */
+.hero__btns .btn{text-shadow:none}
+.hero__btns .btn--ghost{
+  background:var(--primary);
+  color:var(--ink);
+  border-color:var(--primary);
+  box-shadow:0 12px 30px rgba(0,0,0,.3);
+}
+.hero__btns .btn--ghost:hover{
+  background:var(--primary);
+  color:var(--ink);
+  border-color:var(--primary);
+  transform:translateY(-2px);
+  box-shadow:0 18px 40px rgba(0,0,0,.38);
+}
+/* the light sweep would be invisible on white, use a dark one */
+.hero__btns .btn--ghost::before{
+  background:linear-gradient(100deg,transparent,rgba(20,17,15,.10),transparent);
+}
+
+/* products intro sits in one centred column */
+.products__head{
+  display:block;
+  text-align:center;
+}
+.products__head p{margin-inline:auto}
+@media (max-width:992px){.products__head{text-align:center}}
+
+/* the eyebrow drops its leading rule */
+.eyebrow{gap:0}
+.eyebrow::before{content:none;display:none}
+
 .hero__list li .tick{
   background:var(--grad-green);
   box-shadow:0 4px 12px rgba(114,189,53,.45);
@@ -1076,8 +1101,6 @@ body{background:var(--primary)}
 .review blockquote{position:relative}
 .review .avatar{background:var(--grad-green);box-shadow:0 6px 16px rgba(114,189,53,.35)}
 .review:nth-child(even) .avatar{background:var(--grad-amber);color:var(--ink)}
-.reviews-nav button{transition:background .3s var(--ease-soft),color .3s var(--ease-soft),border-color .3s var(--ease-soft),transform .35s var(--ease-out)}
-.reviews-nav button:hover{background:var(--grad-green);border-color:transparent;transform:translateY(-3px);box-shadow:var(--glow-green)}
 
 /* ---------- brands ---------- */
 .brands{border-top:0;position:relative}
@@ -1128,8 +1151,17 @@ body{background:var(--primary)}
 }
 @keyframes shiftHue{from{background-position:0% 0}to{background-position:200% 0}}
 .site-footer h4::after{background:var(--grad-green)}
-.footer-social a{transition:background .3s var(--ease-soft),transform .4s var(--ease-out)}
-.footer-social a:hover{background:var(--grad-green)}
+.footer-social a{
+  background:var(--grad-green);
+  color:var(--primary);
+  box-shadow:0 8px 20px rgba(114,189,53,.28);
+  transition:background .3s var(--ease-soft),transform .4s var(--ease-out),box-shadow .4s var(--ease-out);
+}
+.footer-social a:hover{
+  background:var(--grad-green);
+  transform:translateY(-3px);
+  box-shadow:0 14px 28px rgba(114,189,53,.42);
+}
 
 /* ---------- floating call button ---------- */
 .call-float{
@@ -1747,10 +1779,6 @@ body{background:var(--primary)}
       </article>
     </div>
 
-    <div class="reviews-nav">
-      <button type="button" id="revPrev" aria-label="Previous testimonials"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
-      <button type="button" id="revNext" aria-label="Next testimonials"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
-    </div>
 
     <div class="brands">
       <img src="https://scdoors.com.au/wp-content/uploads/2025/04/Logo-1.png" alt="Accreditations, licenses and compliance" width="316" height="66" loading="lazy">
@@ -2043,19 +2071,6 @@ body{background:var(--primary)}
       var open = item.classList.toggle("is-open");
       btn.setAttribute("aria-expanded", open ? "true" : "false");
     });
-  });
-
-  /* testimonial slider */
-  var track = document.getElementById("reviews");
-  function step(){
-    var card = track.querySelector(".review");
-    return card ? card.getBoundingClientRect().width + 30 : 340;
-  }
-  document.getElementById("revNext").addEventListener("click", function(){
-    track.scrollBy({left: step(), behavior:"smooth"});
-  });
-  document.getElementById("revPrev").addEventListener("click", function(){
-    track.scrollBy({left: -step(), behavior:"smooth"});
   });
 
   /* form demo handling, replace with Contact Form 7 in WordPress */
