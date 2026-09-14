@@ -44,7 +44,6 @@ body{
   color:var(--body);
   background:var(--primary);
   -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
 }
 img{max-width:100%;height:auto;display:block}
 a{color:inherit;text-decoration:none}
@@ -1092,18 +1091,26 @@ body{background:var(--primary)}
 .faq-item:hover button{padding-left:8px}
 .faq-item .plus{transition:transform .45s var(--ease-out),background .3s var(--ease-soft),color .3s var(--ease-soft)}
 .faq-item.is-open .plus{background:var(--grad-green);color:#fff;transform:rotate(135deg)}
+/* The collapsed answer must measure exactly zero. Padding on the body or
+   on the paragraph keeps the 0fr track from collapsing, so the spacing
+   is applied to the container only while the item is open. */
 .faq-item__body{
   display:grid;grid-template-rows:0fr;
-  transition:grid-template-rows .55s var(--ease-out);
+  padding:0;
+  transition:grid-template-rows .5s var(--ease-out),padding-bottom .5s var(--ease-out);
 }
-.faq-item.is-open .faq-item__body{grid-template-rows:1fr}
+.faq-item.is-open .faq-item__body{grid-template-rows:1fr;padding-bottom:26px}
 .faq-item__body > *{overflow:hidden;min-height:0}
 .faq-item__body p{
-  margin:0;padding-bottom:30px;
+  margin:0;padding:0;
   opacity:0;transform:translateY(-6px);
   transition:opacity .45s var(--ease-soft) .08s,transform .45s var(--ease-out) .08s;
 }
 .faq-item.is-open .faq-item__body p{opacity:1;transform:none}
+
+/* tighter question rows */
+.faq-item button{padding:22px 0}
+@media (max-width:620px){.faq-item button{padding:18px 0;font-size:19px}}
 
 /* ---------- contact ---------- */
 .info-card:hover .info-card__icon{background:var(--grad-green);transform:translateY(-2px) scale(1.05)}
