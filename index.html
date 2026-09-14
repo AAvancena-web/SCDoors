@@ -1416,18 +1416,10 @@ body{background:var(--primary)}
 .section-cta__text{
   margin:0;font-size:19px;font-weight:600;color:var(--ink);line-height:1.6;
 }
-.section-cta__call{
-  font-size:15px;font-weight:600;color:var(--body);
-  border-bottom:1px solid transparent;
-  transition:color .25s var(--ease-soft),border-color .25s var(--ease-soft);
-}
-.section-cta__call:hover{color:var(--theredary);border-bottom-color:currentColor}
 
 /* on the dark product section */
 .products .section-cta{border-top-color:rgba(255,255,255,.16)}
 .products .section-cta__text{color:var(--primary)}
-.products .section-cta__call{color:rgba(255,255,255,.72)}
-
 /* ---------- the glow itself ---------- */
 .cta-glow{position:relative;display:inline-block;isolation:isolate;border-radius:8px}
 .cta-glow::before{
@@ -1465,6 +1457,61 @@ body{background:var(--primary)}
 @media (prefers-reduced-motion:reduce){
   .cta-glow::before,.cta-glow::after,.cta-glow .btn{animation:none}
   .cta-glow::before{opacity:.5}
+}
+
+
+/* ---------- section CTA pair, mirrors the banner ---------- */
+.section-cta__btns{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px;
+}
+/* The call button takes the opposite tone to the section it sits on:
+   deep neutral on light grounds, white on dark ones. */
+.btn--call{
+  background:var(--grad-ink);
+  color:var(--primary);
+  border-color:transparent;
+  box-shadow:0 12px 28px rgba(20,17,15,.24);
+}
+.btn--call:hover{
+  background:var(--grad-ink);color:var(--primary);
+  transform:translateY(-2px);
+  box-shadow:0 18px 38px rgba(20,17,15,.32);
+}
+.products .btn--call,.section--dark .btn--call{
+  background:var(--primary);color:var(--ink);
+  box-shadow:0 12px 30px rgba(0,0,0,.38);
+}
+.products .btn--call:hover,.section--dark .btn--call:hover{
+  background:var(--primary);color:var(--ink);
+  box-shadow:0 18px 40px rgba(0,0,0,.46);
+}
+/* the light sweep is invisible on a white button */
+.products .btn--call::before,.section--dark .btn--call::before{
+  background:linear-gradient(100deg,transparent,rgba(20,17,15,.1),transparent);
+}
+@media (max-width:560px){
+  .section-cta__btns{width:100%;flex-direction:column;gap:12px}
+  .section-cta__btns .btn--call{width:100%}
+}
+
+
+/* the quote strip sits on a dark photo, its secondary action reads better
+   as a solid white button than an outline */
+.cta-strip .btn--ghost{
+  background:var(--primary);
+  color:var(--ink);
+  border-color:var(--primary);
+  box-shadow:0 12px 30px rgba(0,0,0,.38);
+}
+.cta-strip .btn--ghost:hover{
+  background:var(--primary);
+  color:var(--ink);
+  border-color:var(--primary);
+  transform:translateY(-2px);
+  box-shadow:0 18px 40px rgba(0,0,0,.46);
+}
+.cta-strip .btn--ghost::before{
+  background:linear-gradient(100deg,transparent,rgba(20,17,15,.1),transparent);
 }
 
 </style>
@@ -1765,10 +1812,12 @@ body{background:var(--primary)}
 
     <div class="section-cta reveal">
       <p class="section-cta__text">Not sure which service you need? Describe the problem and we will point you to the right fix.</p>
-      <div class="cta-glow">
-        <a class="btn btn--primary btn--lg" href="#contact">Get a Free Quote <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      <div class="section-cta__btns">
+        <div class="cta-glow">
+          <a class="btn btn--primary btn--lg" href="#contact">Get a Free Quote <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        </div>
+        <a class="btn btn--call btn--lg" href="tel:0467674414"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2.1z"/></svg> Call 0467 674 414</a>
       </div>
-      <a class="section-cta__call" href="tel:0467674414">or call 0467 674 414</a>
     </div>
 
   </div>
@@ -1883,10 +1932,12 @@ body{background:var(--primary)}
 
     <div class="section-cta reveal">
       <p class="section-cta__text">Seen a door that suits your place? We will measure up and quote it at no cost.</p>
-      <div class="cta-glow">
-        <a class="btn btn--primary btn--lg" href="#contact">Get a Free Quote <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      <div class="section-cta__btns">
+        <div class="cta-glow">
+          <a class="btn btn--primary btn--lg" href="#contact">Get a Free Quote <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        </div>
+        <a class="btn btn--call btn--lg" href="tel:0467674414"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2.1z"/></svg> Call 0467 674 414</a>
       </div>
-      <a class="section-cta__call" href="tel:0467674414">or call 0467 674 414</a>
     </div>
 
   </div>
@@ -1925,10 +1976,12 @@ body{background:var(--primary)}
 
     <div class="section-cta reveal">
       <p class="section-cta__text">Step one takes about a minute, and there is no obligation to go ahead.</p>
-      <div class="cta-glow">
-        <a class="btn btn--primary btn--lg" href="#contact">Start With a Free Quote <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      <div class="section-cta__btns">
+        <div class="cta-glow">
+          <a class="btn btn--primary btn--lg" href="#contact">Start With a Free Quote <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        </div>
+        <a class="btn btn--call btn--lg" href="tel:0467674414"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2.1z"/></svg> Call 0467 674 414</a>
       </div>
-      <a class="section-cta__call" href="tel:0467674414">or call 0467 674 414</a>
     </div>
 
   </div>
@@ -2074,10 +2127,12 @@ body{background:var(--primary)}
 
     <div class="section-cta reveal">
       <p class="section-cta__text">Ready to work with a team that turns up when it says it will?</p>
-      <div class="cta-glow">
-        <a class="btn btn--primary btn--lg" href="#contact">Get a Free Quote <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      <div class="section-cta__btns">
+        <div class="cta-glow">
+          <a class="btn btn--primary btn--lg" href="#contact">Get a Free Quote <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        </div>
+        <a class="btn btn--call btn--lg" href="tel:0467674414"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2.1z"/></svg> Call 0467 674 414</a>
       </div>
-      <a class="section-cta__call" href="tel:0467674414">or call 0467 674 414</a>
     </div>
 
 
