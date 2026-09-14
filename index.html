@@ -1228,6 +1228,152 @@ body{background:var(--primary)}
   .hero__bg{animation:none}
 }
 
+
+/* =========================================================
+   MOBILE DRAWER
+   Lives outside <header> because the header sets backdrop-filter,
+   which would make it the containing block for a fixed child.
+   ========================================================= */
+.mobile-nav{
+  display:none;
+  position:fixed;
+  top:var(--header-h);left:0;right:0;bottom:0;
+  z-index:70;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  background:
+    radial-gradient(520px 300px at 100% 0%,rgba(255,163,0,.10),transparent 68%),
+    radial-gradient(520px 320px at 0% 100%,rgba(114,189,53,.12),transparent 66%),
+    linear-gradient(180deg,#ffffff 0%,var(--sand) 46%,var(--stone) 100%);
+  border-top:1px solid var(--hairline);
+}
+.mobile-nav.is-open{display:block;animation:drawerIn .4s var(--ease-out) both}
+@keyframes drawerIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+
+.mobile-nav__inner{
+  min-height:100%;
+  display:flex;flex-direction:column;
+  padding:22px 24px calc(96px + env(safe-area-inset-bottom,0px));
+}
+
+/* ---------- primary links ---------- */
+.m-menu{list-style:none;margin:0 0 28px;padding:0}
+.m-menu > li{border-bottom:1px solid var(--hairline)}
+.m-menu > li:last-child{border-bottom:0}
+.m-menu > li > a,.m-row > a{
+  display:block;position:relative;
+  padding:17px 0 17px 18px;
+  font-family:"Barlow Condensed","Inter",sans-serif;
+  font-size:23px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
+  color:var(--ink);
+  transition:color .25s var(--ease-soft),padding-left .3s var(--ease-out);
+}
+.m-menu > li > a::before,.m-row > a::before{
+  content:"";position:absolute;left:0;top:50%;translate:0 -50%;
+  width:4px;height:0;border-radius:3px;
+  background:var(--grad-green);
+  transition:height .35s var(--ease-out);
+}
+.m-menu > li > a:hover,.m-row > a:hover{color:var(--secondary);padding-left:24px}
+.m-menu > li > a:hover::before,.m-row > a:hover::before{height:24px}
+
+/* the row lets the label navigate and the caret expand */
+.m-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.m-row > a{flex:1}
+.m-toggle{
+  flex:none;width:40px;height:40px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--primary);border:1px solid var(--hairline);color:var(--ink);
+  transition:transform .4s var(--ease-out),background .3s var(--ease-soft),color .3s var(--ease-soft);
+}
+.m-toggle svg{width:17px;height:17px}
+.m-toggle[aria-expanded="true"]{background:var(--grad-green);border-color:transparent;color:#fff;transform:rotate(180deg)}
+
+/* ---------- submenu, animates its height ---------- */
+.m-sub{
+  list-style:none;margin:0;padding:0;
+  display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows .45s var(--ease-out);
+}
+.has-sub.is-open .m-sub{grid-template-rows:1fr}
+.m-sub > li{overflow:hidden;min-height:0}
+.m-sub-wrap{padding:2px 0 16px 18px}
+.m-sub-list{list-style:none;margin:0;padding:0}
+.m-sub a{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 0;
+  font-size:15.5px;font-weight:600;color:var(--body);
+  transition:color .25s var(--ease-soft),transform .3s var(--ease-out);
+}
+.m-sub a::before{
+  content:"";width:6px;height:6px;border-radius:50%;flex:none;
+  background:var(--theredary);opacity:.55;
+  transition:opacity .25s var(--ease-soft),transform .3s var(--ease-out);
+}
+.m-sub a:hover{color:var(--secondary);transform:translateX(4px)}
+.m-sub a:hover::before{opacity:1;transform:scale(1.3)}
+
+/* ---------- actions and details ---------- */
+.mobile-nav__cta{display:grid;gap:12px;margin-top:auto;padding-top:6px}
+.mobile-nav__meta{
+  list-style:none;margin:26px 0 0;padding:22px 0 0;
+  border-top:1px solid var(--hairline);
+  display:grid;gap:14px;
+}
+.mobile-nav__meta li{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--body)}
+.mobile-nav__meta svg{width:18px;height:18px;flex:none;color:var(--secondary)}
+.mobile-nav__meta a{color:var(--ink-2);font-weight:600}
+.mobile-nav__social{display:flex;gap:12px;margin-top:22px}
+.mobile-nav__social a{
+  width:46px;height:46px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--grad-green);color:#fff;
+  box-shadow:0 8px 20px rgba(114,189,53,.3);
+  transition:transform .35s var(--ease-out),box-shadow .35s var(--ease-out);
+}
+.mobile-nav__social a:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(114,189,53,.42)}
+.mobile-nav__social svg{width:19px;height:19px}
+
+/* ---------- items arrive in sequence ---------- */
+.mobile-nav.is-open .m-menu > li,
+.mobile-nav.is-open .mobile-nav__cta,
+.mobile-nav.is-open .mobile-nav__meta,
+.mobile-nav.is-open .mobile-nav__social{
+  animation:drawerItem .5s var(--ease-out) both;
+}
+.mobile-nav.is-open .m-menu > li:nth-child(1){animation-delay:.04s}
+.mobile-nav.is-open .m-menu > li:nth-child(2){animation-delay:.08s}
+.mobile-nav.is-open .m-menu > li:nth-child(3){animation-delay:.12s}
+.mobile-nav.is-open .m-menu > li:nth-child(4){animation-delay:.16s}
+.mobile-nav.is-open .m-menu > li:nth-child(5){animation-delay:.2s}
+.mobile-nav.is-open .m-menu > li:nth-child(6){animation-delay:.24s}
+.mobile-nav.is-open .m-menu > li:nth-child(7){animation-delay:.28s}
+.mobile-nav.is-open .mobile-nav__cta{animation-delay:.32s}
+.mobile-nav.is-open .mobile-nav__meta{animation-delay:.36s}
+.mobile-nav.is-open .mobile-nav__social{animation-delay:.4s}
+@keyframes drawerItem{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* the drawer carries its own call action, so the floating button steps aside */
+.mobile-nav.is-open ~ .call-float{opacity:0;visibility:hidden;pointer-events:none}
+.call-float{transition:opacity .3s var(--ease-soft),visibility .3s}
+
+/* the burger becomes a close control, keep it above the panel */
+.burger{position:relative;z-index:85;transition:background .3s var(--ease-soft),border-color .3s var(--ease-soft)}
+.burger.is-open{background:var(--primary);border-color:var(--hairline)}
+
+@media (max-width:400px){
+  .mobile-nav__inner{padding-inline:18px}
+  .m-menu > li > a,.m-row > a{font-size:21px}
+}
+@media (prefers-reduced-motion:reduce){
+  .mobile-nav.is-open,
+  .mobile-nav.is-open .m-menu > li,
+  .mobile-nav.is-open .mobile-nav__cta,
+  .mobile-nav.is-open .mobile-nav__meta,
+  .mobile-nav.is-open .mobile-nav__social{animation:none}
+}
+
 </style>
 </head>
 <body>
@@ -1296,36 +1442,64 @@ body{background:var(--primary)}
     </div>
   </div>
 
-  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
-    <div class="container">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li>
-          <a href="/garage-doors/">Garage Doors</a>
-          <ul class="submenu-m">
-            <li><a href="/home-garage-doors-in-melbourne/">Home Garage Doors</a></li>
-            <li><a href="/commercial-garage-doors-in-melbourne/">Commercial Garage Doors</a></li>
-            <li><a href="/sectional-garage-doors-in-melbourne/">Sectional Garage Doors</a></li>
-            <li><a href="/garage-roller-doors-in-melbourne/">Roller Doors</a></li>
-            <li><a href="/tilt-garage-doors-melbourne/">Tilt Doors</a></li>
-            <li><a href="/custom-garage-doors-in-melbourne/">Custom Garage Doors</a></li>
-            <li><a href="/custom-gates-in-melbourne/">Custom Gates</a></li>
-            <li><a href="/garage-door-openers-in-melbourne/">Garage Door Openers</a></li>
-          </ul>
-        </li>
-        <li><a href="/garage-door-installations-melbourne/">Installation</a></li>
-        <li><a href="/garage-door-repairs-in-melbourne/">Repairs</a></li>
-        <li><a href="/garage-door-maintenance-in-melbourne/">Maintenance</a></li>
-        <li><a href="/about-us/">About Us</a></li>
-        <li><a href="/contact-us/">Contact Us</a></li>
-      </ul>
-      <div class="mobile-cta">
-        <a class="btn btn--primary btn--block" href="#contact">Get a Free Quote</a>
-        <a class="btn btn--dark btn--block" href="tel:0467674414">Call 0467 674 414</a>
-      </div>
-    </div>
-  </nav>
 </header>
+
+<!-- ============================ MOBILE DRAWER (global) ============================ -->
+<nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
+  <div class="mobile-nav__inner">
+
+    <ul class="m-menu">
+      <li><a href="/">Home</a></li>
+      <li class="has-sub">
+        <div class="m-row">
+          <a href="/garage-doors/">Garage Doors</a>
+          <button class="m-toggle" type="button" aria-expanded="false" aria-label="Show garage door types">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+        </div>
+        <ul class="m-sub"><li><div class="m-sub-wrap"><ul class="m-sub-list">
+          <li><a href="/home-garage-doors-in-melbourne/">Home Garage Doors</a></li>
+          <li><a href="/commercial-garage-doors-in-melbourne/">Commercial Garage Doors</a></li>
+          <li><a href="/sectional-garage-doors-in-melbourne/">Sectional Garage Doors</a></li>
+          <li><a href="/garage-roller-doors-in-melbourne/">Roller Doors</a></li>
+          <li><a href="/tilt-garage-doors-melbourne/">Tilt Doors</a></li>
+          <li><a href="/custom-garage-doors-in-melbourne/">Custom Garage Doors</a></li>
+          <li><a href="/custom-gates-in-melbourne/">Custom Gates</a></li>
+          <li><a href="/garage-door-openers-in-melbourne/">Garage Door Openers</a></li>
+        </ul></div></li></ul>
+      </li>
+      <li><a href="/garage-door-installations-melbourne/">Installation</a></li>
+      <li><a href="/garage-door-repairs-in-melbourne/">Repairs</a></li>
+      <li><a href="/garage-door-maintenance-in-melbourne/">Maintenance</a></li>
+      <li><a href="/about-us/">About Us</a></li>
+      <li><a href="/contact-us/">Contact Us</a></li>
+    </ul>
+
+    <div class="mobile-nav__cta">
+      <a class="btn btn--primary btn--block btn--lg" href="#contact">Get a Free Quote</a>
+      <a class="btn btn--dark btn--block btn--lg" href="tel:0467674414">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2.1z"/></svg>
+        Call 0467 674 414
+      </a>
+    </div>
+
+    <ul class="mobile-nav__meta">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg><a href="mailto:info@scdoors.com.au">info@scdoors.com.au</a></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Melbourne, VIC 3000</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Mon to Sat, 7am to 6pm</span></li>
+    </ul>
+
+    <div class="mobile-nav__social">
+      <a href="https://www.facebook.com/SCGarageDoorsMelbourne/" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.8c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.4H7.6V14h2.7v8z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/scgarages/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+      </a>
+    </div>
+
+  </div>
+</nav>
 
 <main>
 
@@ -1736,45 +1910,44 @@ body{background:var(--primary)}
     <div class="reviews" id="reviews">
       <article class="review">
         <span class="stars" aria-label="5 out of 5">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
         </span>
-        <blockquote>From the very start they were very professional and prompt, and they communicated right through. This is the second time we have used them and we would not hesitate to use them again. Highly recommend their services.</blockquote>
+        <blockquote>From the very start they were very professional and prompt, they communicated right through. This is the second time that we have used them and wouldn't hesitate to use them again. Highly recommend their services.</blockquote>
         <div class="review__person">
           <span class="avatar">M</span>
-          <div><strong>Mary</strong><span>Melbourne, 1 year ago</span></div>
+          <div><strong>Mary</strong><span>1 year ago</span></div>
         </div>
       </article>
-
       <article class="review">
         <span class="stars" aria-label="5 out of 5">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
         </span>
-        <blockquote>Good workmanship. He suggested what options I could have for a damaged garage door, replaced it and it looks amazing now. He also did maintenance work on my sensor system which was extra. Good work.</blockquote>
+        <blockquote>Good workmanship. And he suggested what options I could have for a damaged garage door. He replaced it and it looks amazing now. He also did some maintenance works on my garage door sensor system which was extra. Good work!</blockquote>
         <div class="review__person">
           <span class="avatar">J</span>
-          <div><strong>John</strong><span>Melbourne, 7 months ago</span></div>
+          <div><strong>John</strong><span>7 months ago</span></div>
         </div>
       </article>
-
       <article class="review">
         <span class="stars" aria-label="5 out of 5">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
         </span>
-        <blockquote>Got my new Merlin power garage door installed today by SC Garage Doors. Really satisfied with the service and I highly recommend them to anyone looking for a reliable team.</blockquote>
+        <blockquote>Got my new Merlin power garage door installed today by SC Garage Doors. Really satisfied with his service and highly recommend.</blockquote>
         <div class="review__person">
           <span class="avatar">S</span>
-          <div><strong>Sandy</strong><span>Melbourne, 9 months ago</span></div>
-        </div>
-      </article>
-
-      <article class="review">
-        <span class="stars" aria-label="5 out of 5">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
-        </span>
-        <blockquote>Quoted quickly, arrived on time and left the site spotless. The pricing was exactly what we were told up front. It is rare to find a trade this easy to deal with.</blockquote>
-        <div class="review__person">
-          <span class="avatar">D</span>
-          <div><strong>David</strong><span>Melbourne, 4 months ago</span></div>
+          <div><strong>Sandy</strong><span>9 months ago</span></div>
         </div>
       </article>
     </div>
@@ -2055,13 +2228,30 @@ body{background:var(--primary)}
     burger.setAttribute("aria-expanded", open ? "true" : "false");
     document.body.style.overflow = open ? "hidden" : "";
   });
+  function closeMenu(){
+    mobileNav.classList.remove("is-open");
+    burger.classList.remove("is-open");
+    burger.setAttribute("aria-expanded","false");
+    document.body.style.overflow = "";
+  }
   mobileNav.addEventListener("click", function(e){
-    if(e.target.tagName === "A"){
-      mobileNav.classList.remove("is-open");
-      burger.classList.remove("is-open");
-      burger.setAttribute("aria-expanded","false");
-      document.body.style.overflow = "";
+    if(e.target.closest("a")) closeMenu();
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && mobileNav.classList.contains("is-open")){
+      closeMenu();
+      burger.focus();
     }
+  });
+
+  /* drawer submenu, the label still navigates, the caret expands */
+  document.querySelectorAll(".m-toggle").forEach(function(btn){
+    btn.addEventListener("click", function(e){
+      e.stopPropagation();
+      var item = btn.closest(".has-sub");
+      var open = item.classList.toggle("is-open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
   });
 
   /* FAQ accordion */
