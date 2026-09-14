@@ -887,8 +887,8 @@ body{background:var(--primary)}
   transition:left .7s var(--ease-out);
 }
 .btn:hover::before{left:130%}
-.btn--primary{background:var(--grad-green);box-shadow:var(--glow-green)}
-.btn--primary:hover{background:var(--grad-green);box-shadow:0 18px 40px rgba(114,189,53,.44)}
+.btn--primary{background:var(--grad-amber);color:var(--ink);box-shadow:var(--glow-amber)}
+.btn--primary:hover{background:var(--grad-amber);color:var(--ink);box-shadow:0 18px 40px rgba(255,163,0,.46)}
 .btn--accent{background:var(--grad-amber);box-shadow:var(--glow-amber)}
 .btn--accent:hover{background:var(--grad-amber);box-shadow:0 18px 40px rgba(255,163,0,.42)}
 .btn--dark{background:var(--grad-ink)}
@@ -1400,6 +1400,73 @@ body{background:var(--primary)}
    the mobile header is fixed rather than sticky. */
 .menu-open{overflow:hidden}
 
+
+/* =========================================================
+   SECTION CTA
+   A closing action for every section, with a pulsing amber
+   glow so the eye is pulled to it.
+   ========================================================= */
+.section-cta{
+  margin-top:clamp(44px,4.5vw,68px);
+  padding-top:clamp(34px,3.5vw,50px);
+  border-top:1px solid var(--hairline);
+  display:flex;flex-direction:column;align-items:center;gap:20px;
+  text-align:center;
+}
+.section-cta__text{
+  margin:0;font-size:19px;font-weight:600;color:var(--ink);line-height:1.6;
+}
+.section-cta__call{
+  font-size:15px;font-weight:600;color:var(--body);
+  border-bottom:1px solid transparent;
+  transition:color .25s var(--ease-soft),border-color .25s var(--ease-soft);
+}
+.section-cta__call:hover{color:var(--theredary);border-bottom-color:currentColor}
+
+/* on the dark product section */
+.products .section-cta{border-top-color:rgba(255,255,255,.16)}
+.products .section-cta__text{color:var(--primary)}
+.products .section-cta__call{color:rgba(255,255,255,.72)}
+
+/* ---------- the glow itself ---------- */
+.cta-glow{position:relative;display:inline-block;isolation:isolate;border-radius:8px}
+.cta-glow::before{
+  content:"";position:absolute;inset:-9px;z-index:-2;border-radius:18px;
+  background:var(--grad-amber);
+  filter:blur(18px);opacity:.45;
+  animation:ctaGlow 2.8s ease-in-out infinite;
+}
+.cta-glow::after{
+  content:"";position:absolute;inset:0;z-index:-1;border-radius:8px;
+  box-shadow:0 0 0 0 rgba(255,163,0,.6);
+  animation:ctaRing 2.8s var(--ease-out) infinite;
+}
+.cta-glow .btn{animation:ctaBreathe 2.8s ease-in-out infinite}
+.cta-glow:hover .btn{animation:none;transform:translateY(-3px)}
+.cta-glow:hover::before{opacity:.8;animation:none}
+.cta-glow:hover::after{animation:none;box-shadow:0 0 0 0 rgba(255,163,0,0)}
+@keyframes ctaGlow{
+  0%,100%{opacity:.34;transform:scale(.97)}
+  50%{opacity:.72;transform:scale(1.04)}
+}
+@keyframes ctaRing{
+  0%{box-shadow:0 0 0 0 rgba(255,163,0,.55)}
+  70%{box-shadow:0 0 0 18px rgba(255,163,0,0)}
+  100%{box-shadow:0 0 0 0 rgba(255,163,0,0)}
+}
+@keyframes ctaBreathe{0%,100%{transform:none}50%{transform:translateY(-2px)}}
+.cta-arrow{transition:transform .35s var(--ease-out)}
+.cta-glow:hover .cta-arrow{transform:translateX(5px)}
+
+@media (max-width:560px){
+  .section-cta__text{font-size:17px}
+  .cta-glow,.cta-glow .btn{width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  .cta-glow::before,.cta-glow::after,.cta-glow .btn{animation:none}
+  .cta-glow::before{opacity:.5}
+}
+
 </style>
 </head>
 <body>
@@ -1695,6 +1762,15 @@ body{background:var(--primary)}
         </div>
       </article>
     </div>
+
+    <div class="section-cta reveal">
+      <p class="section-cta__text">Not sure which service you need? Describe the problem and we will point you to the right fix.</p>
+      <div class="cta-glow">
+        <a class="btn btn--primary btn--lg" href="#contact">Get a Free Quote <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+      <a class="section-cta__call" href="tel:0467674414">or call 0467 674 414</a>
+    </div>
+
   </div>
 </section>
 
@@ -1804,6 +1880,15 @@ body{background:var(--primary)}
         </div>
       </article>
     </div>
+
+    <div class="section-cta reveal">
+      <p class="section-cta__text">Seen a door that suits your place? We will measure up and quote it at no cost.</p>
+      <div class="cta-glow">
+        <a class="btn btn--primary btn--lg" href="#contact">Get a Free Quote <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+      <a class="section-cta__call" href="tel:0467674414">or call 0467 674 414</a>
+    </div>
+
   </div>
 </section>
 
@@ -1837,6 +1922,15 @@ body{background:var(--primary)}
         <p>You get a full range of warranties on products and workmanship, plus ongoing support when you need it.</p>
       </div>
     </div>
+
+    <div class="section-cta reveal">
+      <p class="section-cta__text">Step one takes about a minute, and there is no obligation to go ahead.</p>
+      <div class="cta-glow">
+        <a class="btn btn--primary btn--lg" href="#contact">Start With a Free Quote <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+      <a class="section-cta__call" href="tel:0467674414">or call 0467 674 414</a>
+    </div>
+
   </div>
 </section>
 
@@ -1978,6 +2072,15 @@ body{background:var(--primary)}
       </article>
     </div>
 
+    <div class="section-cta reveal">
+      <p class="section-cta__text">Ready to work with a team that turns up when it says it will?</p>
+      <div class="cta-glow">
+        <a class="btn btn--primary btn--lg" href="#contact">Get a Free Quote <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+      <a class="section-cta__call" href="tel:0467674414">or call 0467 674 414</a>
+    </div>
+
+
 
     <div class="brands">
       <img src="https://scdoors.com.au/wp-content/uploads/2025/04/Logo-1.png" alt="Accreditations, licenses and compliance" width="316" height="66" loading="lazy">
@@ -2072,6 +2175,8 @@ body{background:var(--primary)}
       </div>
       </div>
     </div>
+
+
   </div>
 </section>
 
