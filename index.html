@@ -1374,6 +1374,32 @@ body{background:var(--primary)}
   .mobile-nav.is-open .mobile-nav__social{animation:none}
 }
 
+
+/* =========================================================
+   MOBILE HEADER OFFSET
+   The drawer locks the page with overflow:hidden on body, which turns
+   body into a scroll container and disables position:sticky. So in
+   drawer mode the header is fixed rather than sticky, and the body is
+   padded by the same amount to keep the document in place.
+   ========================================================= */
+@media (max-width:1040px){
+  /* the slim contact bar belongs to the desktop header, retire it with the
+     desktop nav so the fixed offset is a single known height */
+  .topbar{display:none}
+
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:90}
+  body{padding-top:var(--header-h)}
+
+  /* the shrink on scroll would leave a gap above the fixed offset */
+  .site-header.is-stuck .header-inner{min-height:var(--header-h)}
+}
+
+/* Page lock while the drawer is open. The class goes on html as well as
+   body, because the viewport scroller is the root element and clamping
+   body alone still lets the page behind scroll. Safe here only because
+   the mobile header is fixed rather than sticky. */
+.menu-open{overflow:hidden}
+
 </style>
 </head>
 <body>
@@ -2226,13 +2252,15 @@ body{background:var(--primary)}
     var open = mobileNav.classList.toggle("is-open");
     burger.classList.toggle("is-open", open);
     burger.setAttribute("aria-expanded", open ? "true" : "false");
-    document.body.style.overflow = open ? "hidden" : "";
+    document.body.classList.toggle("menu-open", open);
+    document.documentElement.classList.toggle("menu-open", open);
   });
   function closeMenu(){
     mobileNav.classList.remove("is-open");
     burger.classList.remove("is-open");
     burger.setAttribute("aria-expanded","false");
-    document.body.style.overflow = "";
+    document.body.classList.remove("menu-open");
+    document.documentElement.classList.remove("menu-open");
   }
   mobileNav.addEventListener("click", function(e){
     if(e.target.closest("a")) closeMenu();
@@ -2242,6 +2270,11 @@ body{background:var(--primary)}
       closeMenu();
       burger.focus();
     }
+  });
+
+  /* a resize past the drawer breakpoint must not leave the page locked */
+  window.addEventListener("resize", function(){
+    if(window.innerWidth > 1040 && mobileNav.classList.contains("is-open")) closeMenu();
   });
 
   /* drawer submenu, the label still navigates, the caret expands */
