@@ -26,6 +26,24 @@ if ( ! defined( 'SCD_SEED_VERSION' ) ) {
 }
 
 /**
+ * Resolve a field name to its field key.
+ *
+ * update_field() is documented as needing the key, not the name, when the
+ * value does not exist yet. That is precisely the seeder's situation on a page
+ * that has never been saved, and writing by name there can silently no-op.
+ * Falls back to the name so a missing field group cannot fatal the seeder.
+ */
+function scd_seed_ref( $field ) {
+	if ( ! function_exists( 'acf_get_field' ) ) {
+		return $field;
+	}
+
+	$object = acf_get_field( $field );
+
+	return ( is_array( $object ) && ! empty( $object['key'] ) ) ? $object['key'] : $field;
+}
+
+/**
  * Fill a field only when it is currently empty.
  */
 function scd_seed_set( $field, $value, $post_id ) {
@@ -42,7 +60,7 @@ function scd_seed_set( $field, $value, $post_id ) {
 		return false;
 	}
 
-	update_field( $field, $value, $post_id );
+	update_field( scd_seed_ref( $field ), $value, $post_id );
 	return true;
 }
 
@@ -107,7 +125,7 @@ function scd_seed_forms() {
 		);
 
 		if ( ! empty( $found ) ) {
-			update_field( 'scd_cf7_' . $slot, (string) $found[0], 'option' );
+			update_field( scd_seed_ref( 'scd_cf7_' . $slot ), (string) $found[0], 'option' );
 			continue;
 		}
 
@@ -129,7 +147,7 @@ function scd_seed_forms() {
 				'body'      => "A new enquiry from [_site_title]:\n\n[_serialize_all]\n",
 				'use_html'  => false,
 			) );
-			update_field( 'scd_cf7_' . $slot, (string) $id, 'option' );
+			update_field( scd_seed_ref( 'scd_cf7_' . $slot ), (string) $id, 'option' );
 		}
 	}
 }
@@ -166,7 +184,7 @@ function scd_seed_options() {
 		}
 		$current = get_field( $name, 'option' );
 		if ( '' === $current || null === $current || false === $current ) {
-			update_field( $name, $value, 'option' );
+			update_field( scd_seed_ref( $name ), $value, 'option' );
 		}
 	}
 }
@@ -318,6 +336,21 @@ function scd_seed_home( $post_id ) {
 	) );
 	$set( 'reviews_cta_text', 'Ready to work with a team that turns up when it says it will?' );
 	$set( 'reviews_cta_label', 'Get a Free Quote' );
+
+	/*
+	 * Six empty logo slots. The template skips a row with no image, so these
+	 * render nothing until someone uploads, but the rows give an editor
+	 * visible places to drop the accreditation and brand logos into rather
+	 * than an empty repeater.
+	 */
+	$set( 'brands', array(
+		array( 'image' => '' ),
+		array( 'image' => '' ),
+		array( 'image' => '' ),
+		array( 'image' => '' ),
+		array( 'image' => '' ),
+		array( 'image' => '' ),
+	) );
 
 	/* FAQ */
 	$set( 'faq_eyebrow', 'Common questions' );
